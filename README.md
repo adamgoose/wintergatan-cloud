@@ -7,6 +7,7 @@ Wintergatan's cloud analytics.
 
 - Ingress Controller: https://traefik.wintergatan.enge.me
 - Prometheus: https://prom.wintergatan.enge.me
+- Alert Manager: https://am.wintergatan.enge.me
 - Grafana: https://grafana.wintergatan.enge.me
 
 ## Requirements
