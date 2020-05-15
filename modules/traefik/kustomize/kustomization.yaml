@@ -1,0 +1,15 @@
+namespace: traefik
+commonLabels:
+  app: traefik
+
+resources:
+  - namespace.yaml
+  - crds.yaml
+  - rbac.yaml
+  - deployment.yaml
+  - ingress.yaml
+
+configMapGenerator:
+  - name: traefik-config
+    files:
+      - traefik.toml

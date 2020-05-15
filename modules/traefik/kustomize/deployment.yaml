@@ -1,0 +1,40 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traefik
+spec:
+  selector:
+    matchLabels:
+      role: traefik
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        role: traefik
+    spec:
+      serviceAccountName: traefik-ingress-controller
+      containers:
+        - name: traefik
+          image: traefik:v2.2
+          resources: {}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+            - name: https
+              containerPort: 443
+              protocol: TCP
+            - name: traefik
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /etc/traefik
+      volumes:
+        - name: config
+          configMap:
+            name: traefik-config

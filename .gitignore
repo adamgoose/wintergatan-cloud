@@ -1,0 +1,6 @@
+.terraform
+.gitsecret/keys/random_seed
+!*.secret
+terraform.tfstate
+terraform.tfstate.backup
+terraform.tfvars.json
