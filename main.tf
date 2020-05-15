@@ -25,3 +25,9 @@ module "traefik" {
 
   domain = module.cluster.domain
 }
+
+module "prometheus" {
+  source = "./modules/prometheus"
+
+  domain = module.cluster.domain
+}
