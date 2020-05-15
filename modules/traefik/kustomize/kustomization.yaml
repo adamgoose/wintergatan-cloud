@@ -8,6 +8,7 @@ resources:
   - rbac.yaml
   - deployment.yaml
   - ingress.yaml
+  - loadbalancer.yaml
 
 configMapGenerator:
   - name: traefik-config

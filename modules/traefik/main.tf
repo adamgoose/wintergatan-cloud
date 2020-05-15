@@ -18,3 +18,28 @@ resource "kustomization_resource" "traefik" {
     local_file.ingress
   ]
 }
+
+data "kubernetes_service" "loadbalancer" {
+  metadata {
+    name      = "traefik"
+    namespace = "traefik"
+  }
+
+  depends_on = [
+    kustomization_resource.traefik
+  ]
+}
+
+resource "digitalocean_record" "main" {
+  domain = var.domain
+  type   = "A"
+  name   = "@"
+  value  = data.kubernetes_service.loadbalancer.load_balancer_ingress.0.ip
+}
+
+resource "digitalocean_record" "wildcard" {
+  domain = var.domain
+  type   = "CNAME"
+  name   = "*"
+  value  = "${var.domain}."
+}
