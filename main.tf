@@ -31,3 +31,10 @@ module "prometheus" {
 
   domain = module.cluster.domain
 }
+
+module "grafana" {
+  source = "./modules/grafana"
+
+  domain  = module.cluster.domain
+  discord = var.discord
+}

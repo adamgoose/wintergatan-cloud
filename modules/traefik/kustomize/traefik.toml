@@ -1,8 +1,17 @@
 [entryPoints]
   [entryPoints.http]
     address = ":80"
+    [entryPoints.http.http.redirections]
+      [entryPoints.http.http.redirections.entryPoint]
+        to = "https"
+        scheme = "https"
   [entryPoints.https]
     address = ":443"
+  [entryPoints.traefik]
+    address = ":8080"
+  [entryPoints.metrics]
+    address = ":9090"
+
 
 [providers.kubernetesCRD]
 [providers.kubernetesIngress]
@@ -13,3 +22,8 @@
 
 [serversTransport]
   insecureSkipVerify = true
+
+[metrics]
+  [metrics.prometheus]
+    entryPoint = "metrics"
+    addServicesLabels = true
