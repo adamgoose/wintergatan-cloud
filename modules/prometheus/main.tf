@@ -29,6 +29,7 @@ resource "helm_release" "prometheus" {
               - am.${var.domain}
     server:
       baseURL: https://prom.${var.domain}
+      retention: 365d
       ingress:
         enabled: true
         annotations:
@@ -40,6 +41,11 @@ resource "helm_release" "prometheus" {
           - secretName: prom-tls
             hosts:
               - prom.${var.domain}
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxSurge: 0
+          maxUnavailable: 100%
 EOF
   ]
 

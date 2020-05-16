@@ -1,0 +1,6 @@
+namespace: monibot
+commonLabels:
+  app: monibot
+resources:
+  - deployment.yaml
+  - service.yaml

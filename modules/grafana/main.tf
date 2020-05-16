@@ -56,10 +56,19 @@ resource "helm_release" "grafana" {
           providers = [{
             name            = "default"
             type            = "file"
+            folder          = "Infrastructure"
             disableDeletion = true
             editable        = false
             options = {
               path = "/var/lib/grafana/dashboards/default"
+            }
+            }, {
+            name            = "public"
+            type            = "file"
+            disableDeletion = true
+            editable        = false
+            options = {
+              path = "/var/lib/grafana/dashboards/public"
             }
           }]
         }
@@ -77,7 +86,7 @@ resource "helm_release" "grafana" {
             datasource = "k8s.prometheus"
           }
           cert-manager = {
-            gnetId     = 11011
+            gnetId     = 11001
             revision   = 1
             datasource = "k8s.prometheus"
           }
@@ -97,8 +106,13 @@ resource "helm_release" "grafana" {
             datasource = "k8s.prometheus"
           }
         }
+        public = {
+          wintergatan-discord = {
+            json = file("${path.module}/wintergatan_dashboard.json")
+          }
+        }
       }
-      "grafana.ini" : {
+      "grafana.ini" = {
         server = {
           domain   = "grafana.${var.domain}"
           root_url = "https://%(domain)s"

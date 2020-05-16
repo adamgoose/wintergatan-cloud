@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monibot
+spec:
+  selector: {}
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: "9100"
+        prometheus.io/path: /649165975647682560/metrics
+        prometheus.io/scrape: "true"
+    spec:
+      containers:
+        - name: monibot
+          image: phochs/monibot
+          env:
+            - name: MONIBOT_CONFIG
+              value: /config/config.json
+          resources: {}
+          ports:
+            - name: http
+              containerPort: 9100
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: config
+          secret:
+            secretName: monibot-config

@@ -38,3 +38,9 @@ module "grafana" {
   domain  = module.cluster.domain
   discord = var.discord
 }
+
+module "monibot" {
+  source = "./modules/monibot"
+
+  discord_bot_token = var.discord_bot_token
+}
