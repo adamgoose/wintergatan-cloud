@@ -24,4 +24,4 @@ spec:
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
-    name: letsencrypt
+    name: letsencrypt-cloudflare

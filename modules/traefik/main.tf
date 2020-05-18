@@ -30,16 +30,34 @@ data "kubernetes_service" "loadbalancer" {
   ]
 }
 
-resource "digitalocean_record" "main" {
-  domain = var.domain
-  type   = "A"
-  name   = "@"
-  value  = data.kubernetes_service.loadbalancer.load_balancer_ingress.0.ip
+data "cloudflare_zones" "main" {
+  filter {
+    name   = var.domain
+    status = "active"
+    paused = false
+  }
 }
 
-resource "digitalocean_record" "wildcard" {
-  domain = var.domain
-  type   = "CNAME"
-  name   = "*"
-  value  = "${var.domain}."
+resource "cloudflare_record" "traefik" {
+  zone_id = data.cloudflare_zones.main.zones.0.id
+  name    = "traefik"
+  value   = data.kubernetes_service.loadbalancer.load_balancer_ingress.0.ip
+  type    = "A"
+  ttl     = 3600
+}
+
+resource "cloudflare_record" "graphic" {
+  zone_id = data.cloudflare_zones.main.zones.0.id
+  name    = "graphic"
+  value   = data.kubernetes_service.loadbalancer.load_balancer_ingress.0.ip
+  type    = "A"
+  ttl     = 3600
+}
+
+resource "cloudflare_record" "metrics" {
+  zone_id = data.cloudflare_zones.main.zones.0.id
+  name    = "metrics"
+  value   = data.kubernetes_service.loadbalancer.load_balancer_ingress.0.ip
+  type    = "A"
+  ttl     = 3600
 }

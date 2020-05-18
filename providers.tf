@@ -25,3 +25,9 @@ provider "helm" {
 provider "kustomization" {
   kubeconfig_raw = module.cluster.kube_config.raw_config
 }
+
+provider "cloudflare" {
+  version = "~> 2.0"
+  email   = "me.accounts+cloudflare@runbox.com"
+  api_key = var.cloudflare_key
+}

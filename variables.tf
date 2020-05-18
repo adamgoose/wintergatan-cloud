@@ -10,3 +10,9 @@ variable "discord" {
     client_secret = string
   })
 }
+variable "cloudflare_token" {
+  type = string
+}
+variable "cloudflare_key" {
+  type = string
+}

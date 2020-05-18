@@ -24,29 +24,31 @@ resource "helm_release" "grafana" {
       ingress = {
         enabled = true
         annotations = {
-          "cert-manager.io/cluster-issuer"           = "letsencrypt"
+          "cert-manager.io/cluster-issuer"           = "letsencrypt-cloudflare"
           "traefik.ingress.kubernetes.io/router.tls" = "true"
         }
-        hosts = ["grafana.${var.domain}"]
+        hosts = ["graphic.${var.domain}"]
         tls = [{
           secretName = "grafana-tls"
-          hosts      = ["grafana.${var.domain}"]
+          hosts      = ["graphic.${var.domain}"]
         }]
       }
       persistence = {
         enabled = true
         size    = "1Gi"
       }
+      plugins = ["grafana-clock-panel"]
       datasources = {
         "datasources.yaml" = {
           apiVersion = 1
           datasources = [{
-            name     = "k8s.prometheus"
-            type     = "prometheus"
-            access   = "proxy"
-            url      = "http://prometheus-server.prometheus"
-            editable = false
-            version  = 1
+            name      = "k8s.prometheus"
+            type      = "prometheus"
+            access    = "proxy"
+            url       = "http://prometheus-server.prometheus/prometheus"
+            editable  = false
+            version   = 1
+            isDefault = true
           }]
         }
       }
@@ -114,7 +116,7 @@ resource "helm_release" "grafana" {
       }
       "grafana.ini" = {
         server = {
-          domain   = "grafana.${var.domain}"
+          domain   = "graphic.${var.domain}"
           root_url = "https://%(domain)s"
         }
         "auth.anonymous" = {

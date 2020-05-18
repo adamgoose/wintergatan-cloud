@@ -1,4 +1,5 @@
 variable "do_token" {}
+variable "cloudflare_token" {}
 
 resource "kubernetes_namespace" "cert-manager" {
   metadata {
@@ -13,6 +14,16 @@ resource "kubernetes_secret" "do" {
   }
   data = {
     access-token = var.do_token
+  }
+}
+
+resource "kubernetes_secret" "cloudflare" {
+  metadata {
+    name      = "cloudflare"
+    namespace = kubernetes_namespace.cert-manager.metadata[0].name
+  }
+  data = {
+    api-token = var.cloudflare_token
   }
 }
 

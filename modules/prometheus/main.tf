@@ -15,20 +15,27 @@ resource "helm_release" "prometheus" {
 
   values = [<<EOF
     alertmanager:
-      baseURL: https://am.${var.domain}
+      baseURL: https://graphic.${var.domain}/alerting
+      prefixURL: /alerting
       ingress:
         enabled: true
         annotations:
-          cert-manager.io/cluster-issuer: letsencrypt
+          cert-manager.io/cluster-issuer: letsencrypt-cloudflare
           traefik.ingress.kubernetes.io/router.tls: "true"
         hosts:
-          - am.${var.domain}
+          - graphic.${var.domain}/alerting
         tls:
-          - secretName: am-tls
+          - secretName: graphic-tls
             hosts:
-              - am.${var.domain}
+              - graphic.${var.domain}
+      strategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxSurge: 0
+          maxUnavailable: 100%
     server:
-      baseURL: https://prom.${var.domain}
+      baseURL: https://graphic.${var.domain}/prometheus
+      prefixURL: /prometheus
       retention: 365d
       ingress:
         enabled: true
@@ -36,11 +43,11 @@ resource "helm_release" "prometheus" {
           cert-manager.io/cluster-issuer: letsencrypt
           traefik.ingress.kubernetes.io/router.tls: "true"
         hosts:
-          - prom.${var.domain}
+          - graphic.${var.domain}/prometheus
         tls:
-          - secretName: prom-tls
+          - secretName: graphic-tls
             hosts:
-              - prom.${var.domain}
+              - graphic.${var.domain}
       strategy:
         type: RollingUpdate
         rollingUpdate:

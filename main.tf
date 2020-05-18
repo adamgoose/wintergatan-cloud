@@ -6,7 +6,7 @@ module "cluster" {
   kubernetes_version = "1.17.5-do.0"
   node_size          = "s-2vcpu-2gb"
   node_count         = 2
-  domain             = "wintergatan.enge.me"
+  domain             = "wintergatan.community"
 }
 
 resource "local_file" "kubeconfig" {
@@ -17,7 +17,8 @@ resource "local_file" "kubeconfig" {
 module "cert-manager" {
   source = "./modules/cert-manager"
 
-  do_token = var.do_token
+  do_token         = var.do_token
+  cloudflare_token = var.cloudflare_token
 }
 
 module "traefik" {
@@ -43,4 +44,5 @@ module "monibot" {
   source = "./modules/monibot"
 
   discord_bot_token = var.discord_bot_token
+  domain            = module.cluster.domain
 }
